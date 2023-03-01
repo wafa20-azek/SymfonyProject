@@ -2,15 +2,24 @@
 
 namespace App\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Classroom;
 
-class StudentController extends AbstractController
+class ClassroomController extends AbstractController
 {
-    #[Route('/welcome')]
-    public function index(){
-        return new Response("Bonjour mes étudiants");
+    #[Route('/classroom', name: 'app_classroom')]
+    public function index(ManagerRegistry $doctrine): Response
+    {
+        $repo = $doctrine->getRepository(Classroom::class);
+        $classrooms=$repo->findAll();
+        var_dump($classrooms);
+        die();
+        return $this->render('classroom/index.html.twig', [
+            'controller_name' => 'ClassroomController',
+        ]);
     }
     public function addStudent(Request $req)
     {
@@ -43,5 +52,4 @@ class StudentController extends AbstractController
          return $this -> redirectToRoute('app_student');
       
 }
-
 }
